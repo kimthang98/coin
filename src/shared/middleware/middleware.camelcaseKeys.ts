@@ -7,6 +7,9 @@ export const removeEmptyProperties = () => {
     req.body = omitEmpty(req.body);
     req.params = omitEmpty(req.params);
     req.query = omitEmpty(req.query);
+    req.domain = `${req.protocol}://${req.headers.host}`;
     return next();
   };
 };
+
+

@@ -3,20 +3,37 @@ import { ObjectLiteral } from 'typeorm';
 import { ErrorResponseModel, Pagination, SuccessResponseModel } from '../type/index.type';
 @Injectable()
 export class ApiResponseService {
-  withSuccess(data: ObjectLiteral | ObjectLiteral[]): SuccessResponseModel {
-    return { data };
+  withSuccess(data: ObjectLiteral | ObjectLiteral[] | string | number): SuccessResponseModel {
+    return {
+      status: 1,
+      statusCode: 200,
+      message: 'thành công',
+      data,
+    };
   }
   withPagingSuccess(data: ObjectLiteral[], pagination: Pagination): SuccessResponseModel {
-    return { data, pagination };
-  }
-  success(): { data: { success: boolean } } {
-    return { data: { success: true } };
-  }
-  withError(error: Error, status: number, message: string): ErrorResponseModel {
     return {
+      status: 1,
+      statusCode: 200,
+      message: 'thành công',
+      data,
+      pagination,
+    };
+  }
+  success(): SuccessResponseModel {
+    return {
+      status: 1,
+      statusCode: 200,
+      message: 'thành công',
+      data: { success: true },
+    };
+  }
+  withError(status: number, message: string, error?: any): ErrorResponseModel {
+    return {
+      status: 0,
       statusCode: status,
-      message: message,
-      error: error,
+      message,
+      error,
     };
   }
 }

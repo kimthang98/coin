@@ -1,8 +1,7 @@
 import { NotFoundException } from '@nestjs/common';
-import { identity } from 'rxjs';
 import { Repository, ObjectLiteral, getManager } from 'typeorm';
-import { IS_ACTIVE } from '../constants/connstants';
-import { IPaginationOptions, Pagination } from '../type/index.type';
+import { IS_ACTIVE } from '../common/constants';
+import { Entity, IPagination, IPaginationOptions, Pagination } from '../type/index.type';
 import { HashService } from './hash/hash.service';
 
 export class BaseService extends HashService {
@@ -13,11 +12,16 @@ export class BaseService extends HashService {
     super();
   }
 
-  async findOneOrFail(options?: ObjectLiteral, select?: string[], message?: string): Promise<any> {
+  async findOneOrFail(
+    options?: ObjectLiteral,
+    select?: string[] | null,
+    message?: string,
+  ): Promise<Entity> {
+    message = message || 'Not Found';
     const data = await this.repository.findOne({
       where: {
         ...options,
-        isActive: IS_ACTIVE.ACTIVE,
+        is_active: IS_ACTIVE.ACTIVE,
       },
       select,
     });
@@ -25,11 +29,12 @@ export class BaseService extends HashService {
     return data;
   }
 
-  async findByIdOrFail(id: number, select?: string[] | null, message?: string): Promise<any> {
+  async findByIdOrFail(id: number, select?: string[] | null, message?: string): Promise<Entity> {
+    message = message || 'Not Found';
     const data = await this.repository.findOne({
       where: {
         id: id,
-        isActive: IS_ACTIVE.ACTIVE,
+        is_active: IS_ACTIVE.ACTIVE,
       },
       select,
     });
@@ -37,11 +42,11 @@ export class BaseService extends HashService {
     return data;
   }
 
-  async findAll(options?: ObjectLiteral, select?: string[]): Promise<any[]> {
+  async findAll(options?: ObjectLiteral, select?: string[]): Promise<Entity[]> {
     return await this.repository.find({
       where: {
         ...options,
-        isActive: IS_ACTIVE.ACTIVE,
+        is_active: IS_ACTIVE.ACTIVE,
       },
       select,
       order: {
@@ -54,11 +59,11 @@ export class BaseService extends HashService {
     paging: IPaginationOptions,
     options?: ObjectLiteral,
     select?: string[],
-  ): Promise<any> {
+  ): Promise<[Entity[], IPagination]> {
     const [data, count] = await this.repository.findAndCount({
       where: {
         ...options,
-        isActive: IS_ACTIVE.ACTIVE,
+        is_active: IS_ACTIVE.ACTIVE,
       },
       select,
       skip: (paging.page - 1) * paging.limit,
@@ -73,62 +78,62 @@ export class BaseService extends HashService {
       total: count,
     };
 
-    return { data, pagination };
+    return [data, pagination];
   }
 
-  async create(data: ObjectLiteral): Promise<any> {
+  async create(data: ObjectLiteral): Promise<Entity> {
     const manager = getManager();
     const item = await this.repository.create(data);
     const result = await manager.save(this.entity, item);
     return result;
   }
 
-  async findOne(options?: ObjectLiteral, select?: string[]): Promise<any> {
+  async findOne(options?: ObjectLiteral, select?: string[]): Promise<Entity | undefined> {
     return await this.repository.findOne({
       where: {
         ...options,
-        isActive: IS_ACTIVE.ACTIVE,
+        is_active: IS_ACTIVE.ACTIVE,
       },
       select,
     });
   }
 
-  async findById(id: number, select?: string[]): Promise<any> {
+  async findById(id: number, select?: string[]): Promise<Entity | undefined> {
     return await this.repository.findOne({
       where: {
         id: id,
-        isActive: IS_ACTIVE.ACTIVE,
+        is_active: IS_ACTIVE.ACTIVE,
       },
       select,
     });
   }
 
-  async findByIds(id: number[], select?: string[]): Promise<any> {
+  async findByIds(id: number[], select?: string[]): Promise<Entity[]> {
     return await this.repository.findByIds(id, { select });
   }
 
-  async update(id: number, data: ObjectLiteral): Promise<any> {
+  async update(id: number, data: ObjectLiteral): Promise<{ success: boolean }> {
     const item = await this.findByIdOrFail(id);
-    data.isActive = IS_ACTIVE.ACTIVE;
+    data.is_active = IS_ACTIVE.ACTIVE;
     const manager = getManager();
     await manager.save(this.entity, { ...item, ...data });
     return { success: true };
   }
 
-  async delete(id: number): Promise<any> {
+  async delete(id: number): Promise<{ success: boolean }> {
     const item = await this.findByIdOrFail(id);
     const manager = getManager();
     await manager.save(this.entity, {
       ...item,
-      isActive: IS_ACTIVE.ACTIVE,
+      is_active: IS_ACTIVE.ACTIVE,
     });
     return { success: true };
   }
 
-  async updateOrCreate(attributes: ObjectLiteral, data: ObjectLiteral): Promise<any> {
+  async updateOrCreate(attributes: ObjectLiteral, data: ObjectLiteral): Promise<Entity> {
     let options = {
       ...attributes,
-      isActive: IS_ACTIVE.ACTIVE,
+      is_active: IS_ACTIVE.ACTIVE,
     };
     const datacheck = await this.findOne(options);
     if (!datacheck) return await this.create(data);
