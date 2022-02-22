@@ -14,6 +14,11 @@ export class MailController {
 
   @Get()
   async sendMails() {
-    return await this.mailService.sendUserConfirmation();
+    return await this.mailService.userresetPassword({
+      name: 'thang',
+      url: 'https://www.google.com',
+      account: '0345932500',
+      email: 'dokimthang98@gmail.com',
+    });
   }
 }

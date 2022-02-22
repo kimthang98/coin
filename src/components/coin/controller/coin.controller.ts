@@ -31,6 +31,7 @@ import { CoinCreateParams, CoinUpdateParams } from '../coin.dto';
 import { ERROR_MESSAGE, IS_ACTIVE, ROLE } from 'src/shared/common/constants';
 import { Between, getRepository, Like, IsNull, Not } from 'typeorm';
 import { Coin } from '../entities/coin.entity';
+import { MailService } from 'src/components/mail/service/mail.service';
 
 @ApiTags('Coin')
 @ApiHeader({
@@ -39,7 +40,13 @@ import { Coin } from '../entities/coin.entity';
 })
 @Controller('/coin')
 export class CoinController {
-  constructor(private response: ApiResponseService, private coinService: CoinService) {}
+  constructor(
+    private response: ApiResponseService,
+    private coinService: CoinService,
+    private mailService: MailService,
+  ) {}
+
+  
 
   @ApiOperation({ summary: 'tạo lệnh' })
   @ApiBearerAuth()

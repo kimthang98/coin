@@ -61,3 +61,9 @@ export interface PagingType {
   take: number;
   skip: number;
 }
+export interface ResetPasswordType {
+  name: string;
+  url: string;
+  account: string | number;
+  email: string;
+}

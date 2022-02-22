@@ -2,7 +2,12 @@
   "collection": "@nestjs/schematics",
   "sourceRoot": "src",
   "compilerOptions": {
-    "assets": ["components/mail/templates/**/*"],
+    "assets": [
+      {
+        "include": "*/*/*/**/*.hbs",
+        "outDir": "dist/src"
+      }
+    ],
     "watchAssets": true
   }
 }
