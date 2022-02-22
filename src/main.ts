@@ -28,7 +28,6 @@ async function bootstrap() {
   app.use(morgan('tiny'));
   app.use(removeEmptyProperties());
   app.use(pagingMiddleware());
-
   app.useGlobalFilters(new HttpExceptionFilter());
   await app.listen(port, () => {
     console.log(`run port ${port}`);

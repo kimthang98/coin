@@ -13,6 +13,7 @@ import { JwtService } from '@nestjs/jwt';
 import { Request } from 'express';
 import { Auth } from '../decorators/auth.decorator';
 import { EMAIL, ERROR_MESSAGE, conterEmil } from './../../../shared/common/constants';
+import { MailService } from 'src/components/mail/service/mail.service';
 @ApiTags('Auth')
 @ApiHeader({
   name: 'Content-Type',
@@ -24,6 +25,7 @@ export class AuthController {
     private response: ApiResponseService,
     private authService: AuthService,
     private jwtService: JwtService,
+    private mailService: MailService,
   ) {}
   @ApiOperation({ summary: 'đăng nhập' })
   @Put('log-in')
@@ -75,7 +77,7 @@ export class AuthController {
     return this.response.success();
   }
 
-  @ApiOperation({ summary: 'tìm mật khẩu chưa xong' })
+  @ApiOperation({ summary: 'tìm mật khẩu' })
   @Put('find-password')
   async findPassword(
     @Body() body: FindPasswordParams,
@@ -96,11 +98,13 @@ export class AuthController {
       token: null,
       key_password: code,
     });
-    const conter = conterEmil({
+    const user = {
       name: check.name,
-      link: `${req.domain}/auth/form-pass/${code}`,
-      phone: body.phone,
-    });
+      url: `${req.domain}/auth/form-pass/${code}`,
+      account: body.phone,
+      email: check.email,
+    };
+    await this.mailService.userresetPassword(user);
     // await sendMail(check.email, EMAIL.TITLE, conter);
     return this.response.withSuccess({ message: 'vui lòng kiểm tra email' });
   }
