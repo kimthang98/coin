@@ -12,6 +12,16 @@ export const STATUS_USRE = {
   ACTIVE: 1,
   INACTIVE: 0,
 };
+export const STATUS_COIN = {
+  ACTIVE: 1,
+  INACTIVE: 0,
+};
+
+export const COIN_TYPE = {
+  BUY: 1, // mua
+  SELL: 0, // bán
+};
+
 export const ROLE = {
   ADMIN: 'admin',
   USER: 'user',
@@ -37,6 +47,13 @@ export const ERROR_MESSAGE = {
   AUTH_ACTIVE_FAIL: 'Tài khoản của bạn chưa được kích hoạt vui lòng kích hoạt',
   FORGOT_PASSWORD_FAIL: 'Đổi mật khẩu không thành công',
   USER_FAIL: 'Tài khoản không tồn tại',
+  COIN_FAIL: 'Coin đã tồn tại trong hệ thống',
+  COIN_NOT_FAIL: 'Coin  không tồn tại trong hệ thống',
+};
+
+export const   validator_message=  {
+  coin_status: 'status phải là số 0 hoặc 1',
+  coin_percent_sale: 'percent_sale phải là số 1 đến 100',
 };
 
 export const conterEmil = (data: { name: string; link: string | number; phone: string }) => {

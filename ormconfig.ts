@@ -11,6 +11,7 @@ const config: MysqlConnectionOptions = {
   entities: ['dist/**/**/**/**/*.entity{.ts,.js}'],
 
   // synchronize: true,
-  // logging: true,
+  
+  logging: ['error'],
 };
 export default config;

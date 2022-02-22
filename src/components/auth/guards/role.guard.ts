@@ -32,8 +32,6 @@ export class RoleGuard implements CanActivate {
 
   async canActivate(context: ExecutionContext): Promise<boolean> {
     try {
-      throw new ForbiddenException(ERROR_MESSAGE.AUTH_USER_FAIL);
-
       const request: Request = context.switchToHttp().getRequest();
       let token = request.headers.authorization.split('Bearer ').filter((e) => e)[0];
       const dataUser = await this.repositoryUser.findOne({

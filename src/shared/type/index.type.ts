@@ -2,7 +2,7 @@ import { ObjectLiteral } from 'typeorm';
 
 export interface Pagination {
   total: number;
-  limit: number;
+  take: number;
   page: number;
   totalpages?: number;
 }
@@ -15,7 +15,7 @@ export interface ErrorResponseModel {
 }
 
 export interface IPaginationOptions {
-  limit: number;
+  take: number;
   page: number;
 }
 
@@ -58,6 +58,6 @@ export interface EnvType {
 
 export interface PagingType {
   page: number;
-  limit: number;
-  offset: number;
+  take: number;
+  skip: number;
 }

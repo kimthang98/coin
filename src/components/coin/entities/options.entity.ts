@@ -5,13 +5,10 @@ import {
   CreateDateColumn,
   UpdateDateColumn,
   DeleteDateColumn,
-  ManyToOne,
-  JoinColumn,
 } from 'typeorm';
 import { IS_ACTIVE, COIN_TYPE } from '../../../shared/common/constants';
-import { User } from './../../user/entities/user.entity';
-@Entity({ name: 'coins' })
-export class Coin {
+@Entity({ name: 'options' })
+export class Options {
   @PrimaryGeneratedColumn()
   id: number;
 
@@ -19,42 +16,15 @@ export class Coin {
     default: COIN_TYPE.BUY,
     nullable: true,
   })
+  key: string;
+  @Column({
+    nullable: true,
+  })
+  value: string;
+  @Column({
+    nullable: true,
+  })
   type: number;
-  @Column({
-    nullable: true,
-    type: 'float',
-  })
-  price: number;
-  @Column({
-    nullable: true,
-  })
-  coin: string;
-  @Column({
-    nullable: true,
-    type: 'float',
-  })
-  price_start: number;
-  @Column({
-    nullable: true,
-  })
-  time_day: string;
-
-  @Column({
-    nullable: true,
-    type: 'float',
-  })
-  quantily_usdt: number;
-  // phần trăm bán
-  @Column({
-    nullable: true,
-    type: 'float',
-  })
-  percent_sale: number;
-  @Column({
-    name: 'user_id',
-    nullable: true,
-  })
-  user_id: number;
   @Column({
     default: IS_ACTIVE.ACTIVE,
   })
@@ -83,10 +53,4 @@ export class Coin {
     nullable: true,
   })
   public deleted_at: Date;
-
-  @ManyToOne(() => User, (user) => user.coins)
-  @JoinColumn({
-    name: 'user_id',
-  })
-  user: User;
 }

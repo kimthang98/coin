@@ -9,6 +9,7 @@ declare global {
       uuid: string;
       domain: string;
       paging: PagingType;
+      date: { end_date: string; start_date: string };
     }
   }
 }

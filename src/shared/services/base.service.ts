@@ -66,14 +66,14 @@ export class BaseService extends HashService {
         is_active: IS_ACTIVE.ACTIVE,
       },
       select,
-      skip: (paging.page - 1) * paging.limit,
-      take: paging.limit,
+      skip: (paging.page - 1) * paging.take,
+      take: paging.take,
       order: {
         id: 'DESC',
       },
     });
     const pagination: Pagination = {
-      limit: Number(paging.limit),
+      take: Number(paging.take),
       page: Number(paging.page),
       total: count,
     };

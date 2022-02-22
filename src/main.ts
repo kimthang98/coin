@@ -4,6 +4,7 @@ import { SwaggerModule, DocumentBuilder } from '@nestjs/swagger';
 import * as morgan from 'morgan';
 import * as bodyParser from 'body-parser';
 import { removeEmptyProperties } from './shared/middleware/middleware.camelcaseKeys';
+import { test } from './shared/middleware/test';
 import { ValidationPipe } from '@nestjs/common';
 import { HttpExceptionFilter } from './shared/error-response/http-exception.filter';
 import { pagingMiddleware } from './shared/middleware/middleware.paging';
@@ -27,10 +28,10 @@ async function bootstrap() {
   app.use(morgan('tiny'));
   app.use(removeEmptyProperties());
   app.use(pagingMiddleware());
-
   app.useGlobalFilters(new HttpExceptionFilter());
   await app.listen(port, () => {
     console.log(`run port ${port}`);
+    // test();
   });
 }
 bootstrap();
